@@ -22,6 +22,10 @@ fn throw3() -> Result<(), ()> {
     Ok(())
 }
 
+fn throw4() -> Result<(), &'static str> {
+    trace_err!(throw_static_message())
+}
+
 fn gives_ok() -> Result<&'static str, &'static str> {
     Ok("ok")
 }
@@ -72,12 +76,19 @@ fn test_returns_ok() {
 fn test_mod_throw() {
     let error = mod_test::throws().unwrap_err();
     assert_eq!(error.to_string(), "Error: ahhhh\
-    \n\tat 38:8 in lib::mod_test (tests/lib.rs)");
+    \n\tat 42:8 in lib::mod_test (tests/lib.rs)");
 }
 
 #[test]
 fn test_throws_into() {
     let error = throws_into().unwrap_err();
     assert_eq!(error.to_string(), "Error: some static string\
-    \n\tat 43:4 in lib (tests/lib.rs)")
+    \n\tat 47:4 in lib (tests/lib.rs)")
+}
+
+#[test]
+fn test_mark_throw() {
+    let error = throw4().unwrap_err();
+    assert_eq!(error.to_string(), "Error: hi\n\tat 26:4 in lib \
+    (tests/lib.rs)\n\tat 8:4 in lib (tests/lib.rs)");
 }

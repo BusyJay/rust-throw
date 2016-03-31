@@ -290,6 +290,15 @@ macro_rules! up {
 }
 
 #[macro_export]
+macro_rules! trace_err {
+    ($e:expr) => ({
+        let res = $e;
+        let v = up!(res);
+        Ok(v)
+    })
+}
+
+#[macro_export]
 macro_rules! as_err {
     ($e:expr) => ({
         let mut e = $e;
